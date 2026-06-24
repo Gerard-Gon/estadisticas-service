@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: estadisticas-deployment 
+  name: estadisticas-deployment
 spec:
   replicas: 2
   selector:
@@ -14,12 +14,27 @@ spec:
     spec:
       containers:
       - name: estadisticas
-        image: 914091100375.dkr.ecr.us-east-1.amazonaws.com/estadisticas:latest
+        image: 914091100375.dkr.ecr.us-east-1.amazonaws.com/estadisticas-service:latest
         ports:
         - containerPort: 3000
+        # CAMBIO: Inyectamos el host de la BD para que el código no busque localhost
+        env:
+        - name: DB_HOST
+          value: "postgres-service"
         envFrom:
         - secretRef:
             name: casino-secrets
+        # CAMBIO: Agregamos las sondas de salud que definiste en tu código
+        livenessProbe:
+          httpGet:
+            path: /livez
+            port: 3000
+          initialDelaySeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 3000
+          initialDelaySeconds: 10
 ---
 apiVersion: v1
 kind: Service
