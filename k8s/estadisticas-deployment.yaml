@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: estadisticas
-        image: 914091100375.dkr.ecr.us-east-1.amazonaws.com/estadisticas-service:latest
+        image: 994995081324.dkr.ecr.us-east-1.amazonaws.com/casino/estadisticas-service:latest
         resources:
           requests:
             cpu: "100m"
